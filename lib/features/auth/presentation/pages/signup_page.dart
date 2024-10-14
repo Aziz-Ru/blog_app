@@ -1,7 +1,7 @@
-import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_field.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +41,12 @@ class _SignupPageState extends State<SignupPage> {
             if (state is AuthFailure) {
               showSnackBar(context, state.message);
             }
-            
+            if (state is AuthSuccess) {
+              showSnackBar(context, 'Account Created Successfully');
+              Navigator.push(context, SignInPage.route()); //navigate to login page
+            }
           },
           builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Loader();
-            }
             return Form(
               key: formkey,
               child: Column(
@@ -91,7 +91,8 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   const SizedBox(height: 15),
                   AuthGradientButton(
-                      buttonText: 'Sign Up',
+                      buttonText:
+                          state is AuthLoading ? 'Loading...' : 'Sign Up',
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
                           context.read<AuthBloc>().add(AuthSignUp(

@@ -36,7 +36,9 @@ class AuthRemoteImplemention implements AuthRemoteDataSource {
       final existEmail =
           await remoteDataSource.from('profiles').select().eq('email', email);
 
-      print(existEmail);
+      if (existEmail.isNotEmpty) {
+        throw const AuthException('Email already exist!');
+      }
       final response = await remoteDataSource.auth.signUp(
         password: password,
         email: email,
@@ -44,14 +46,14 @@ class AuthRemoteImplemention implements AuthRemoteDataSource {
           'name': name,
         },
       );
-      print(response);
+      // print(response);
       if (response.user == null) {
         throw const ServerException('User is null!');
       }
 
       return UserModel.fromJson(response.user!.toJson());
     } on AuthException catch (e) {
-      print(e.message);
+      // print(e.message);
       throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
@@ -69,7 +71,7 @@ class AuthRemoteImplemention implements AuthRemoteDataSource {
         email: email,
       );
       if (response.user == null) {
-        throw const ServerException('User is null!');
+        throw const ServerException('Email is not exist!');
       }
 
       return UserModel.fromJson(response.user!.toJson());
