@@ -3,14 +3,18 @@ class Blog {
   final String title;
   final String content;
   final String imageUrl;
-  final List<String> categories;
+  final List<String> catagories;
   final String userId;
+  final DateTime createdAt;
+  final String? username;
 
   Blog(
       {required this.id,
       required this.title,
       required this.content,
       required this.imageUrl,
-      required this.categories,
-      required this.userId});
+      required this.catagories,
+      required this.userId,
+      required this.createdAt,
+      this.username});
 }

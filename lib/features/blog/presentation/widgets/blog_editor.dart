@@ -16,9 +16,9 @@ class BlogEditor extends StatelessWidget {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return "${hintText} can't be empty";
+          return "$hintText can't be empty";
         }
-        return '';
+        return null;
       },
     );
   }

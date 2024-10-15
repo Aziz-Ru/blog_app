@@ -14,38 +14,42 @@ class BlogRepositoryImplementation implements BlogRepository {
   BlogRepositoryImplementation(this.blogRemoteDatasource);
 
   @override
-  Future<Either<Failure, Blog>> uploadBlog(
+  Future<Either<Failure, String>> uploadBlog(
       {required String title,
       required String content,
       required File image,
       required List<String> categories,
-      required String userId}) async {
+      required String userId,
+      required DateTime createdAt}) async {
     try {
       BlogModel? blogModel = BlogModel(
           id: const Uuid().v1(),
           title: title,
           content: content,
           imageUrl: '',
-          categories: categories,
-          userId: userId);
+          catagories: categories,
+          userId: userId,
+          createdAt: createdAt);
       final imageUrl = await blogRemoteDatasource.uploadBlogImage(
           image: image, blog: blogModel);
-
+      // print('repositoryImplementation imageurl: $imageUrl');
       blogModel = blogModel.copyWith(imageUrl: imageUrl);
+      final successs = await blogRemoteDatasource.uploadBlog(blogModel);
 
-      final blog = await blogRemoteDatasource.uploadBlog(blogModel);
-
-      return Right(blog);
-      
+      return Right(successs);
     } on ServerException catch (e) {
+      // print('repositoryImplementation: ${e.message}');
       return Left(Failure(e.message));
     }
   }
 
   @override
-  Future<Either<Failure, String>> uploadBlogImage(
-      {required File image, required Blog blog}) async {
-    // TODO: implement uploadBlogImage
-    throw UnimplementedError();
+  Future<Either<Failure, List<Blog>>> getAllBlogs() async {
+    try {
+      final blogs = await blogRemoteDatasource.getAllBlogs();
+      return right(blogs);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
   }
 }

@@ -2,22 +2,22 @@ import 'dart:io';
 
 import 'package:blog_app/core/error/failures.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
-import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UploadBlog implements UseCase<Blog, UploadBlogParams> {
+class UploadBlog implements UseCase<String, UploadBlogParams> {
   final BlogRepository blogRepository;
   UploadBlog(this.blogRepository);
 
   @override
-  Future<Either<Failure, Blog>> call(UploadBlogParams params) async {
+  Future<Either<Failure, String>> call(UploadBlogParams params) async {
     return await blogRepository.uploadBlog(
       title: params.title,
       content: params.content,
       image: params.image,
       categories: params.categories,
       userId: params.userId,
+      createdAt: params.createdAt,
     );
   }
 }
@@ -28,6 +28,7 @@ class UploadBlogParams {
   final File image;
   final List<String> categories;
   final String userId;
+  final DateTime createdAt;
 
   UploadBlogParams({
     required this.title,
@@ -35,5 +36,6 @@ class UploadBlogParams {
     required this.image,
     required this.categories,
     required this.userId,
+    required this.createdAt,
   });
 }
