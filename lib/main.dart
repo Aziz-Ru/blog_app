@@ -3,6 +3,7 @@ import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/init_dependencies.main.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,9 @@ void main() async {
     ),
     BlocProvider(
       create: (_) => serviceLocator<AuthBloc>(),
+    ),
+    BlocProvider(
+      create: (_) => serviceLocator<BlogBloc>(),
     )
   ], child: const MyApp()));
 }
